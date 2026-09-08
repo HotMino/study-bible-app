@@ -1,0 +1,35 @@
+name: EAS Build APK
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create .env from secrets
+        run: |
+          echo "EXPO_PUBLIC_BIBLEHUB_API_KEY=${{ secrets.BIBLEHUB_API_KEY }}" > .env
+
+      - name: Install EAS CLI
+        run: npm install --global eas-cli
+
+      - name: Build APK (no wait)
+        run: eas build --platform android --profile preview --non-interactive --no-wait
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
