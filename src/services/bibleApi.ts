@@ -225,8 +225,32 @@ export const getStrongEntry = async (strongsNumber: string): Promise<StrongEntry
   };
 };
 
-export const getCrossReferences = async (verseId: string): Promise<CrossReference[]> => {
-  // This would require an additional API - placeholder implementation
-  // For now, return empty array
-  return [];
+export const getCrossReferences = async (
+  book: string,
+  chapter: number,
+  verse: number
+): Promise<CrossReference[]> => {
+  const data = await bibleHubRequest('get_cross_references', {
+    book: String(book),
+    chapter: String(chapter),
+    verse: String(verse),
+  });
+
+  if (data && data.status === 'error') {
+    throw new Error(data.message || 'Failed to fetch cross references');
+  }
+
+  const raw = data?.data ?? data;
+  const list: any[] = Array.isArray(raw)
+    ? raw
+    : raw?.references ?? raw?.results ?? [];
+
+  return list.map((item: any) => ({
+    book: item.book || '',
+    chapter: Number(item.chapter) || 0,
+    verse: Number(item.verse) || 0,
+    reference: item.reference || item.ref || '',
+    text: item.text || '',
+    topic: item.topic || item.theme || undefined,
+  }));
 };

@@ -65,8 +65,11 @@ export interface SearchResult {
 }
 
 export interface CrossReference {
-  fromVerse: string;
-  toVerse: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  reference: string;
+  text?: string;
   topic?: string;
 }
 
