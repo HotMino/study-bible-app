@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+build/
+
+# Environment variables — never commit secrets
+.env
+.env.local
+.env.production
+
+# TypeScript
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+*.log
